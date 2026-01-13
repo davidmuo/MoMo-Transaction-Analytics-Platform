@@ -1,7 +1,7 @@
 # MoMo Transaction Analytics Platform
 
 ## Team Information
-**Team Name:** [Your Team Name]
+**Team Name:** Team 12
 
 **Team Members:**
 - David Muotoh-Francis - [@davidmuotoh](https://github.com/davidmuo) - Lead Developer

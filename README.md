@@ -16,9 +16,9 @@ The **MoMo Transaction Analytics Platform** is a data pipeline and visualization
 
 ## Project Links
 
-🎨 **Architecture Diagram:** [Link will be added here]
+ **Architecture Diagram:** [Link will be added here]
 
-📋 **Scrum Board:** [Link will be added here]
+ **Scrum Board:** [Link will be added here]
 
 ---
 

@@ -4,7 +4,7 @@
 **Team Name:** Team 12
 
 **Team Members:**
-- David Muotoh-Francis - [@davidmuotoh](https://github.com/davidmuo) - Lead Developer
+- David Muotoh-Francis - [@davidmuotoh](https://github.com/davidmuo) - Lead Developer, designer, e.t.c
 
 ---
 
@@ -16,7 +16,7 @@ The **MoMo Transaction Analytics Platform** is a data pipeline and visualization
 
 ## Project Links
 
- **Architecture Diagram:** [Link will be added here]
+ **Architecture Diagram(miro):**(https://miro.com/welcomeonboard/Zzk0Y0JLSHUzeWhUblhwMEtOdHU0bjBCc2cvekovazIwSVFJZ0pabHlNaXRnckttd3ZkWFZtRGlMUTg2SFd3MkxSbTI3UVJGZXpXWGpSaGZhNzZIbzNmcERaOXhkcTN4SmtweG1WUXU4OG5aUjNzWCt2SEo5MWdMRWM4MWpCWDVyVmtkMG5hNDA3dVlncnBvRVB2ZXBnPT0hdjE=?share_link_id=428529003251)
 
  **Scrum Board(trello):** https://trello.com/invite/b/6966a43653d8efd3311e4241/ATTIaa5ae89ef53cfc0232a2589611e385a87625231C/momo-analytics-platform 
 

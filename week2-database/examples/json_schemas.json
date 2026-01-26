@@ -1,0 +1,223 @@
+{
+  "_documentation": {
+    "title": "MoMo SMS Database - JSON Schema Examples",
+    "description": "JSON representations of database entities for API serialization",
+    "version": "1.0",
+    "sql_to_json_mapping": {
+      "naming_convention": "SQL snake_case converts to JSON camelCase",
+      "null_handling": "NULL values represented as null in JSON",
+      "datetime_format": "ISO 8601 format (YYYY-MM-DDTHH:mm:ss.sssZ)",
+      "decimal_handling": "DECIMAL fields serialized as numbers, not strings",
+      "enum_handling": "ENUM values serialized as lowercase strings",
+      "foreign_keys": "Replaced with nested objects or arrays for related data"
+    }
+  },
+
+  "entities": {
+    "user": {
+      "_table": "users",
+      "schema": {
+        "userId": "INT (from user_id)",
+        "fullName": "VARCHAR(100) (from full_name)",
+        "phoneNumber": "VARCHAR(15) (from phone_number)",
+        "maskedPhone": "VARCHAR(15) (from masked_phone)",
+        "accountNumber": "VARCHAR(20) (from account_number)",
+        "userType": "ENUM (from user_type)",
+        "isActive": "BOOLEAN (from is_active)",
+        "createdAt": "DATETIME (from created_at)",
+        "updatedAt": "DATETIME (from updated_at)"
+      },
+      "example": {
+        "userId": 1,
+        "fullName": "Jane Smith",
+        "phoneNumber": "250790777777",
+        "maskedPhone": "*********013",
+        "accountNumber": null,
+        "userType": "individual",
+        "isActive": true,
+        "createdAt": "2024-05-10T16:30:51.000Z",
+        "updatedAt": "2024-05-10T16:30:51.000Z"
+      }
+    },
+
+    "transactionCategory": {
+      "_table": "transaction_categories",
+      "schema": {
+        "categoryId": "INT (from category_id)",
+        "categoryName": "VARCHAR(50) (from category_name)",
+        "categoryCode": "VARCHAR(10) (from category_code)",
+        "description": "TEXT",
+        "isDebit": "BOOLEAN (from is_debit)",
+        "feeApplicable": "BOOLEAN (from fee_applicable)"
+      },
+      "example": {
+        "categoryId": 2,
+        "categoryName": "Outgoing Transfer",
+        "categoryCode": "*165*",
+        "description": "Money sent to another MoMo user",
+        "isDebit": true,
+        "feeApplicable": true
+      }
+    },
+
+    "transaction": {
+      "_table": "transactions",
+      "schema": {
+        "transactionId": "INT (from transaction_id)",
+        "externalTxnId": "VARCHAR(20) (from external_txn_id)",
+        "categoryId": "INT FK (from category_id)",
+        "amount": "DECIMAL(15,2)",
+        "fee": "DECIMAL(10,2)",
+        "balanceAfter": "DECIMAL(15,2) (from balance_after)",
+        "currency": "VARCHAR(3)",
+        "transactionTimestamp": "DATETIME (from transaction_timestamp)",
+        "senderMessage": "TEXT (from sender_message)",
+        "merchantCode": "VARCHAR(10) (from merchant_code)",
+        "status": "ENUM"
+      },
+      "example": {
+        "transactionId": 6,
+        "externalTxnId": "38069282043",
+        "categoryId": 2,
+        "amount": 10000.00,
+        "fee": 100.00,
+        "balanceAfter": 28300.00,
+        "currency": "RWF",
+        "transactionTimestamp": "2024-05-11T20:34:47.000Z",
+        "senderMessage": null,
+        "merchantCode": null,
+        "status": "completed"
+      }
+    },
+
+    "transactionParty": {
+      "_table": "transaction_parties",
+      "_description": "Junction table for M:N relationship between users and transactions",
+      "schema": {
+        "partyId": "INT (from party_id)",
+        "transactionId": "INT FK (from transaction_id)",
+        "userId": "INT FK (from user_id)",
+        "partyRole": "ENUM (from party_role)"
+      },
+      "example": {
+        "partyId": 10,
+        "transactionId": 6,
+        "userId": 1,
+        "partyRole": "sender"
+      }
+    }
+  },
+
+  "complexExamples": {
+    "completeTransactionWithRelatedData": {
+      "_description": "Transaction with all nested relationships",
+      "_use_case": "GET /api/transactions/100",
+      "data": {
+        "transactionId": 100,
+        "externalTxnId": "38069282043",
+        "amount": 4050.00,
+        "fee": 0,
+        "balanceAfter": 730.00,
+        "currency": "RWF",
+        "transactionTimestamp": "2024-06-01T14:35:41.000Z",
+        "status": "completed",
+        "category": {
+          "categoryId": 3,
+          "categoryName": "Merchant Payment",
+          "isDebit": true,
+          "feeApplicable": false
+        },
+        "parties": [
+          {
+            "partyId": 172,
+            "partyRole": "sender",
+            "user": {
+              "userId": 1,
+              "fullName": "Account Owner",
+              "phoneNumber": "250795963036",
+              "userType": "individual"
+            }
+          },
+          {
+            "partyId": 173,
+            "partyRole": "merchant",
+            "user": {
+              "userId": 2,
+              "fullName": "Jane Smith",
+              "maskedPhone": "*********013",
+              "userType": "merchant"
+            }
+          }
+        ],
+        "rawSms": {
+          "smsId": 109,
+          "body": "TxId: 38069282043. Your payment of 4,050 RWF to Jane Smith 20505...",
+          "readableDate": "1 Jun 2024 2:35:49 PM",
+          "isProcessed": true
+        }
+      }
+    },
+
+    "userWithTransactionHistory": {
+      "_description": "User with recent transactions and statistics",
+      "_use_case": "GET /api/users/1",
+      "data": {
+        "userId": 1,
+        "fullName": "Account Owner",
+        "phoneNumber": "250795963036",
+        "accountNumber": "36521838",
+        "userType": "individual",
+        "isActive": true,
+        "recentTransactions": [
+          {
+            "transactionId": 8,
+            "categoryName": "Data Bundle",
+            "amount": 10000.00,
+            "partyRole": "sender",
+            "status": "completed"
+          }
+        ],
+        "statistics": {
+          "totalTransactions": 1600,
+          "totalVolume": 30905070.00,
+          "totalFees": 77920.00
+        }
+      }
+    },
+
+    "paginatedResponse": {
+      "_description": "Paginated list of transactions",
+      "_use_case": "GET /api/transactions?page=1&limit=20",
+      "data": {
+        "pagination": {
+          "currentPage": 1,
+          "totalPages": 80,
+          "totalRecords": 1600,
+          "limit": 20
+        },
+        "transactions": []
+      }
+    }
+  },
+
+  "apiResponseFormats": {
+    "successResponse": {
+      "status": "success",
+      "code": 200,
+      "message": "Success",
+      "data": {},
+      "meta": {
+        "timestamp": "2024-05-11T20:35:00.000Z"
+      }
+    },
+    "errorResponse": {
+      "status": "error",
+      "code": 404,
+      "message": "not found",
+      "data": null,
+      "meta": {
+        "timestamp": "2024-05-11T20:35:00.000Z"
+      }
+    }
+  }
+}

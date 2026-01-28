@@ -1,17 +1,14 @@
--- ============================================================================
 -- MoMo SMS Data Processing System - Database Setup Script
 -- Version: 1.0
 -- Description: Complete database schema for MTN Mobile Money SMS transaction processing
--- ============================================================================
 
 DROP DATABASE IF EXISTS momo_sms_db;
 CREATE DATABASE momo_sms_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE momo_sms_db;
 
--- ============================================================================
 -- TABLE: users
--- Description: Stores information about all parties involved in transactions
--- ============================================================================
+-- Description: stores information about users who sent or received money
+
 CREATE TABLE users (
     user_id INT AUTO_INCREMENT PRIMARY KEY COMMENT 'Unique identifier for each user',
     full_name VARCHAR(100) NOT NULL COMMENT 'Full name of the user',
@@ -31,10 +28,8 @@ CREATE INDEX idx_users_phone ON users(phone_number);
 CREATE INDEX idx_users_name ON users(full_name);
 CREATE INDEX idx_users_account ON users(account_number);
 
--- ============================================================================
 -- TABLE: transaction_categories
--- Description: Defines types of mobile money transactions
--- ============================================================================
+-- Description: describes available transaction categories
 CREATE TABLE transaction_categories (
     category_id INT AUTO_INCREMENT PRIMARY KEY COMMENT 'Unique identifier for category',
     category_name VARCHAR(50) NOT NULL UNIQUE COMMENT 'Human-readable category name',
@@ -49,10 +44,8 @@ CREATE TABLE transaction_categories (
 
 CREATE INDEX idx_category_code ON transaction_categories(category_code);
 
--- ============================================================================
 -- TABLE: transactions
--- Description: Main transaction records parsed from SMS messages
--- ============================================================================
+-- Description: parsed transaction SMS data
 CREATE TABLE transactions (
     transaction_id INT AUTO_INCREMENT PRIMARY KEY COMMENT 'Internal unique identifier',
     external_txn_id VARCHAR(20) COMMENT 'Transaction ID from MoMo system (TxId/Financial Transaction Id)',
@@ -81,11 +74,9 @@ CREATE INDEX idx_txn_category ON transactions(category_id);
 CREATE INDEX idx_txn_amount ON transactions(amount);
 CREATE INDEX idx_txn_status ON transactions(status);
 
--- ============================================================================
--- TABLE: transaction_parties (Junction Table - Resolves M:N relationship)
--- Description: Links users to transactions with their roles (sender/receiver)
--- One transaction can have multiple parties, one user can be in many transactions
--- ============================================================================
+-- TABLE: transaction_parties (Junction Table - Resolves M: N relationship)
+-- Description: links users to transactions with their roles (sender/receiver)
+-- One transaction can have multiple parties, and one user can be in many transactions
 CREATE TABLE transaction_parties (
     party_id INT AUTO_INCREMENT PRIMARY KEY COMMENT 'Unique identifier',
     transaction_id INT NOT NULL COMMENT 'Foreign key to transaction',
@@ -104,10 +95,8 @@ CREATE INDEX idx_party_transaction ON transaction_parties(transaction_id);
 CREATE INDEX idx_party_user ON transaction_parties(user_id);
 CREATE INDEX idx_party_role ON transaction_parties(party_role);
 
--- ============================================================================
 -- TABLE: system_logs
--- Description: Audit trail for data processing operations
--- ============================================================================
+-- Description: records actions performed during transaction processing
 CREATE TABLE system_logs (
     log_id INT AUTO_INCREMENT PRIMARY KEY COMMENT 'Unique log entry identifier',
     log_type ENUM('import', 'export', 'error', 'processing', 'audit', 'security') NOT NULL COMMENT 'Type of log entry',
@@ -129,10 +118,8 @@ CREATE INDEX idx_log_level ON system_logs(log_level);
 CREATE INDEX idx_log_timestamp ON system_logs(created_at);
 CREATE INDEX idx_log_table ON system_logs(affected_table);
 
--- ============================================================================
 -- TABLE: sms_raw_data
--- Description: Stores original SMS data for audit and reprocessing
--- ============================================================================
+-- Description: keeps original SMS data for reference
 CREATE TABLE sms_raw_data (
     sms_id INT AUTO_INCREMENT PRIMARY KEY COMMENT 'Unique SMS record identifier',
     protocol VARCHAR(10) COMMENT 'SMS protocol',
@@ -157,10 +144,8 @@ CREATE INDEX idx_sms_address ON sms_raw_data(address);
 CREATE INDEX idx_sms_processed ON sms_raw_data(is_processed);
 CREATE INDEX idx_sms_date ON sms_raw_data(sms_date_ms);
 
--- ============================================================================
 -- TABLE: balance_history
--- Description: Tracks account balance changes over time
--- ============================================================================
+-- Description: tracks account balance as it changes over time
 CREATE TABLE balance_history (
     balance_id INT AUTO_INCREMENT PRIMARY KEY COMMENT 'Unique identifier',
     user_id INT NOT NULL COMMENT 'Account owner',
@@ -179,10 +164,8 @@ CREATE TABLE balance_history (
 CREATE INDEX idx_balance_user ON balance_history(user_id);
 CREATE INDEX idx_balance_timestamp ON balance_history(recorded_at);
 
--- ============================================================================
--- TABLE: user_tags (Additional M:N example - Users can have multiple tags)
--- Description: Flexible tagging system for user categorization
--- ============================================================================
+-- TABLE: user_tags (Additional M: N example - Users can have multiple tags)
+-- Description: allows users to be categorized using tags
 CREATE TABLE tags (
     tag_id INT AUTO_INCREMENT PRIMARY KEY COMMENT 'Unique tag identifier',
     tag_name VARCHAR(50) NOT NULL UNIQUE COMMENT 'Tag name',
@@ -204,9 +187,7 @@ CREATE TABLE user_tags (
     CONSTRAINT uq_user_tag UNIQUE (user_id, tag_id)
 ) ENGINE=InnoDB COMMENT='Junction table for user-tag M:N relationship';
 
--- ============================================================================
 -- SAMPLE DATA INSERTION (DML)
--- ============================================================================
 
 -- Insert Transaction Categories
 INSERT INTO transaction_categories (category_name, category_code, description, is_debit, fee_applicable) VALUES
@@ -305,9 +286,7 @@ INSERT INTO balance_history (user_id, transaction_id, balance_before, balance_af
 (1, 6, 38400.00, 28300.00),
 (1, 7, 28300.00, 25280.00);
 
--- ============================================================================
 -- SECURITY RULES AND CONSTRAINTS
--- ============================================================================
 
 -- Create a view to mask sensitive data for reports
 CREATE VIEW v_transactions_masked AS
@@ -342,9 +321,7 @@ FROM transactions t
 JOIN transaction_categories tc ON t.category_id = tc.category_id
 GROUP BY DATE(transaction_timestamp), tc.category_name;
 
--- ============================================================================
 -- STORED PROCEDURES FOR COMMON OPERATIONS
--- ============================================================================
 
 DELIMITER //
 
@@ -403,9 +380,7 @@ END //
 
 DELIMITER ;
 
--- ============================================================================
 -- SAMPLE QUERIES FOR TESTING (CRUD OPERATIONS)
--- ============================================================================
 
 -- READ: Get all transactions with category names
 SELECT t.*, tc.category_name 

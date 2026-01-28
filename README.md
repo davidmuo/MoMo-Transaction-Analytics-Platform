@@ -31,6 +31,8 @@ The **MoMo Transaction Analytics Platform** is a data pipeline and visualization
 - Resolved M:N relationship between users and transactions using junction table
 - JSON schema examples for all entities
 - SQL setup script with constraints, triggers, and indexes
+- [DATABASE DESIGN DOCUMENT EWD 12.pdf](https://github.com/user-attachments/files/24923877/DATABASE.DESIGN.DOCUMENT.EWD.12.pdf)
+
 
 **Files:**
 ```
@@ -40,6 +42,7 @@ database/
 ├── database_setup.sql      # MySQL schema with constraints, triggers, indexes
 ├── json_examples.json      # Sample JSON data for entities
 └── json_schemas.json       # JSON schema definitions
+
 ```
 
 **Database Entities:**

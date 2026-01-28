@@ -5,7 +5,7 @@
 
 **Team Members:**
 - David Muotoh-Francis - [@davidmuotoh](https://github.com/davidmuo) - Lead Developer, designer, e.t.c
-- Christian MPANO  -  [@Christian-pprogrammer(https://github.com/Christian-pprogrammer)]  -  Developer
+- Christian MPANO  -  [@Christian-pprogrammer](https://github.com/Christian-pprogrammer)  -  Developer
 
 ---
 

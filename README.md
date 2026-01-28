@@ -4,7 +4,7 @@
 **Team Name:** Team 12
 
 **Team Members:**
-- David Muotoh-Francis - [@davidmuotoh](https://github.com/davidmuo) - Developer and designer
+- David Muotoh-Francis - [@davidmuo](https://github.com/davidmuo) - Developer and designer
 - Christian MPANO - [@Christian-pprogrammer](https://github.com/Christian-pprogrammer) - Developer
 - Liata Ornella Sifa - [Liata-Ornella](https://github.com/Liata-Ornella) - Developer
 - Kenia Umutoni - [@kenia-bit](https://github.com/Kenia-bit) - Developer

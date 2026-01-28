@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoMo SMS Database ERD</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        h1 { color: #333; }
+        .mermaid { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+    <h1>MoMo SMS Data Processing - Entity Relationship Diagram</h1>
+    <div class="mermaid">
+erDiagram
+    users ||--o{ transaction_parties : "participates in"
+    users ||--o{ balance_history : "has"
+    users ||--o{ user_tags : "has"
+    tags ||--o{ user_tags : "assigned to"
+    transactions ||--o{ transaction_parties : "involves"
+    transactions ||--o| sms_raw_data : "parsed from"
+    transactions ||--o{ balance_history : "affects"
+    transaction_categories ||--o{ transactions : "classifies"
+
+    users {
+        int user_id PK
+        varchar full_name
+        varchar phone_number
+        varchar masked_phone
+        varchar account_number
+        enum user_type
+        boolean is_active
+        datetime created_at
+        datetime updated_at
+    }
+
+    transactions {
+        int transaction_id PK
+        varchar external_txn_id
+        int category_id FK
+        decimal amount
+        decimal fee
+        decimal balance_after
+        varchar currency
+        datetime transaction_timestamp
+        text sender_message
+        varchar merchant_code
+        enum status
+        datetime created_at
+    }
+
+    transaction_categories {
+        int category_id PK
+        varchar category_name
+        varchar category_code
+        text description
+        boolean is_debit
+        boolean fee_applicable
+        datetime created_at
+    }
+
+    transaction_parties {
+        int party_id PK
+        int transaction_id FK
+        int user_id FK
+        enum party_role
+        datetime created_at
+    }
+
+    sms_raw_data {
+        int sms_id PK
+        varchar protocol
+        varchar address
+        bigint sms_date_ms
+        int sms_type
+        text body
+        varchar service_center
+        bigint date_sent_ms
+        varchar readable_date
+        varchar contact_name
+        boolean is_processed
+        text processing_error
+        int transaction_id FK
+        datetime created_at
+    }
+
+    balance_history {
+        int balance_id PK
+        int user_id FK
+        int transaction_id FK
+        decimal balance_before
+        decimal balance_after
+        datetime recorded_at
+    }
+
+    system_logs {
+        int log_id PK
+        enum log_type
+        enum log_level
+        text message
+        varchar affected_table
+        int affected_records
+        int execution_time_ms
+        varchar ip_address
+        varchar user_agent
+        datetime created_at
+        varchar created_by
+    }
+
+    tags {
+        int tag_id PK
+        varchar tag_name
+        varchar tag_description
+        datetime created_at
+    }
+
+    user_tags {
+        int user_tag_id PK
+        int user_id FK
+        int tag_id FK
+        datetime assigned_at
+        varchar assigned_by
+    }
+    </div>
+    <script>mermaid.initialize({startOnLoad:true, theme:'default'});</script>
+</body>
+</html>

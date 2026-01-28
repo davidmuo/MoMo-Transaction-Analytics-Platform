@@ -6,7 +6,8 @@ import enum
 
 Base = declarative_base()
 
-# enums for the different types we need
+# enumerations used to ensure data integrity by limiting fields to valid, predefined options
+
 class UserType(enum.Enum):
     individual = "individual"
     merchant = "merchant"
@@ -152,7 +153,7 @@ class Transaction(Base):
         return d
 
 
-# junction table for the M:N relationship between users and transactions
+# junction table to model the many-to-many relationship between users and transactions
 class TransactionParty(Base):
     __tablename__ = 'transaction_parties'
     
@@ -315,7 +316,7 @@ class UserTag(Base):
     )
 
 
-# helper functions
+# Utility functions used to set up and manage the database
 
 def init_db(db_url="sqlite:///momo_sms.db"):
     engine = create_engine(db_url, echo=False)

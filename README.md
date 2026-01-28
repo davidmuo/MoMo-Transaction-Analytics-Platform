@@ -8,6 +8,7 @@
 - Christian MPANO  -  [@Christian-pprogrammer](https://github.com/Christian-pprogrammer)  -  Developer
 - Liata Ornella Sifa - [Liata-Ornella](https://github.com/Liata-Ornella) - Developer
 - Kenia Umutoni  - [@kenia-bit](https://github.com/Kenia-bit)
+- Nathanaella Hirwa - [@NathanaellaHirwa](https://github.com/NathanaellaHirwa) 
 
 ---
 

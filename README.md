@@ -36,7 +36,7 @@ The **MoMo Transaction Analytics Platform** is a data pipeline and visualization
 ```
 database/
 ├── docs/                   # ERD diagram and documentation
-├── week 2 screenshots/     # API and query screenshots
+├── week 2 screenshots/     # API screenshots
 ├── database_setup.sql      # MySQL schema with constraints, triggers, indexes
 ├── json_examples.json      # Sample JSON data for entities
 └── json_schemas.json       # JSON schema definitions

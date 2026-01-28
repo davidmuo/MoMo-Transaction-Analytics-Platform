@@ -6,6 +6,7 @@
 **Team Members:**
 - David Muotoh-Francis - [@davidmuotoh](https://github.com/davidmuo) - Lead Developer, designer, e.t.c
 - Christian MPANO  -  [@Christian-pprogrammer](https://github.com/Christian-pprogrammer)  -  Developer
+- Liata Ornella Sifa - [Liata-Ornella](https://github.com/Liata-Ornella) - Developer
 - Kenia Umutoni  - [@kenia-bit](https://github.com/Kenia-bit)
 
 ---
